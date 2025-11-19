@@ -21,7 +21,7 @@ Thumbs.db
 *.swp
 *.swo
 
-# Python
+# Python (not needed for HF deployment but keeping for local dev)
 __pycache__/
 *.py[cod]
 *$py.class
@@ -31,5 +31,17 @@ env/
 venv/
 *.egg-info/
 
-# Exam Reports (Optional - comment out if you want to track them)
-exam_report_*.json
+# Exam Reports (don't commit sensitive data)
+reports/*.json
+!reports/.gitkeep
+
+# Local testing
+test/
+.pytest_cache/
+
+# Build files
+dist/
+build/
+
+# Hugging Face specific
+.git-credentials
