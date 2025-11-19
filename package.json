@@ -7,9 +7,9 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-    "engines": {
-      "node": ">=18.0.0",
-      "npm": ">=9.0.0"
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   },
   "keywords": [
     "proctoring",
@@ -17,22 +17,30 @@
     "monitoring",
     "security",
     "ml",
-    "computer-vision"
+    "computer-vision",
+    "mediapipe",
+    "face-detection",
+    "exam-monitoring"
   ],
-  "author": "Azhaan Ali Siddiqui",
-  "license": "ISC",
+  "author": "Azhaan Ali Siddiqui <azhaanalisiddiqui15@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AzhaanGlitch/VigilCam.git"
+  },
+  "homepage": "https://github.com/AzhaanGlitch/VigilCam#readme",
   "dependencies": {
-       "express": "^4.18.2",
-       "ejs": "^3.1.9",
-       "mongoose": "^7.6.3",
-       "express-session": "^1.17.3",
-       "passport": "^0.6.0",
-       "passport-local": "^1.0.0",
-       "passport-google-oauth20": "^2.0.0",
-       "bcryptjs": "^2.4.3",
-       "connect-flash": "^0.1.1",
-       "dotenv": "^16.3.1",
-       "socket.io": "^4.6.1"
+    "express": "^4.18.2",
+    "ejs": "^3.1.9",
+    "mongoose": "^7.6.3",
+    "express-session": "^1.17.3",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "passport-google-oauth20": "^2.0.0",
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^16.3.1",
+    "socket.io": "^4.6.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
