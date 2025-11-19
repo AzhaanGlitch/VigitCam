@@ -20,7 +20,12 @@ connectDB();
 // Initialize Express app
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 // Make io accessible to routes
 app.set('io', io);
@@ -31,7 +36,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Body parser middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json({ limit: '10mb' })); // Increased for base64 images
+app.use(express.json({ limit: '10mb' }));
 
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -45,7 +50,7 @@ const sessionMiddleware = session({
     maxAge: 1000 * 60 * 60 * 24, // 24 hours
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: 'lax'
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
   }
 });
 
@@ -78,11 +83,10 @@ app.use('/users', require('./routes/users'));
 app.use('/monitoring', require('./routes/monitoring'));
 app.use('/history', require('./routes/history'));
 
-// Socket.IO connection handling (CLIENT-SIDE ML VERSION)
+// Socket.IO connection handling
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
 
-  // Client starts monitoring (no Python needed)
   socket.on('start-monitoring', (data) => {
     console.log('Monitoring started for user:', data.userId);
     socket.emit('monitoring-started', { 
@@ -91,11 +95,8 @@ io.on('connection', (socket) => {
     });
   });
 
-  // Receive violation from client
   socket.on('violation', async (data) => {
     console.log('Violation received:', data.violation.type);
-    
-    // Broadcast to monitoring interfaces (if needed for admin dashboard)
     io.emit('violation-alert', {
       userId: data.userId,
       violation: data.violation,
@@ -103,7 +104,6 @@ io.on('connection', (socket) => {
     });
   });
 
-  // Save report to database
   socket.on('save-report', async (reportData) => {
     console.log('Saving report for user:', reportData.userId);
     
@@ -149,7 +149,6 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Stop monitoring
   socket.on('stop-monitoring', () => {
     console.log('Monitoring stopped for:', socket.id);
     socket.emit('monitoring-stopped', {
@@ -158,7 +157,6 @@ io.on('connection', (socket) => {
     });
   });
 
-  // Handle disconnect
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
   });
@@ -180,19 +178,18 @@ app.use((req, res) => {
   });
 });
 
-// Set port and host
-const PORT = process.env.PORT || 3000;
+// Set port and host for Hugging Face Spaces
+const PORT = process.env.PORT || 7860;
 const HOST = process.env.HOST || '0.0.0.0';
 
 server.listen(PORT, HOST, () => {
   console.log(`═══════════════════════════════════════════════`);
-  console.log(`    VigilCam Server (Client-Side ML Version)`);
+  console.log(`    VigilCam Server (Hugging Face Spaces)`);
   console.log(`    Running on Port ${PORT}`);
   console.log(`    Host: ${HOST}`);
   console.log(`    Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`    WebSocket Server: Active`);
   console.log(`    ML Processing: Browser-Based ✅`);
-  console.log(`    Python Required: NO ✅`);
   console.log(`═══════════════════════════════════════════════`);
 });
 
